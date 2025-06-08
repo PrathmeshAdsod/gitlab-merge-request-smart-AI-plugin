@@ -1,0 +1,25 @@
+stages:
+  - format
+  - review
+
+format:
+  stage: format
+  image: python:3.11
+  only:
+    - merge_requests
+  script:
+    - chmod +x scripts/format_files.sh
+    - ./scripts/format_files.sh
+  variables:
+    GIT_STRATEGY: fetch
+
+review:
+  stage: review
+  image: python:3.11
+  only:
+    - merge_requests
+  script:
+    - pip install -r scripts/requirements.txt
+    - python scripts/review_pr.py
+  variables:
+    GIT_STRATEGY: fetch

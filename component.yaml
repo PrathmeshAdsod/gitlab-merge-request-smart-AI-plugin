@@ -1,0 +1,11 @@
+name: smart-pr-ai
+description: >
+  GitLab Smart PR Assistant – auto-formats changed files and posts AI-powered code review suggestions as inline MR comments. Works for Python, JS, Go, Ruby, and more.
+version: 1.0.0
+inputs:
+  LLM_API_KEY:
+    description: API key for your LLM provider (e.g. OpenAI, Anthropic, etc.)
+    required: true
+  GITLAB_PAT:
+    description: GitLab Personal Access Token with `api` scope for posting comments
+    required: true
