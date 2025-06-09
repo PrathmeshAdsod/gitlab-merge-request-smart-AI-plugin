@@ -1,0 +1,126 @@
+# Enhanced Smart PR AI GitLab Plugin Component
+name: smart-pr-ai-plugin
+description: |
+  Comprehensive AI-powered code review plugin for GitLab that provides:
+  - Multi-language code formatting (Python, JS, TS, Java, Go, etc.)
+  - Intelligent code review using Gemini AI
+  - Automated tagging and labeling
+  - Security vulnerability detection
+  - Automated changelog generation
+  - Performance analysis and suggestions
+
+version: 2.0.0
+author: Smart PR AI Team
+license: MIT
+
+inputs:
+  LLM_API_KEY:
+    description: |
+      API key for Gemini AI service. Get your key from Google AI Studio.
+      This is required for AI-powered code review functionality.
+    required: true
+    type: string
+    
+  GITLAB_PAT:
+    description: |
+      GitLab Personal Access Token with 'api' scope.
+      Required for posting comments and managing labels.
+      Create at: GitLab Settings > Access Tokens
+    required: true
+    type: string
+    
+  REVIEW_FOCUS:
+    description: |
+      Comma-separated list of review focus areas.
+      Options: security,performance,maintainability,best_practices,testing
+    required: false
+    default: "security,performance,maintainability,best_practices"
+    type: string
+    
+  MAX_FILES_REVIEW:
+    description: Maximum number of files to review in a single MR
+    required: false
+    default: "20"
+    type: string
+    
+  ENABLE_CHANGELOG:
+    description: Enable automatic changelog generation on main branch merges
+    required: false
+    default: "true"
+    type: boolean
+    
+  SECURITY_SCAN_LEVEL:
+    description: Security scanning sensitivity (low, medium, high)
+    required: false
+    default: "medium"
+    type: string
+
+outputs:
+  review_status:
+    description: Overall review status (approved, needs_attention, failed)
+    
+  issues_found:
+    description: Total number of issues found
+    
+  security_issues:
+    description: Number of security issues detected
+    
+  files_formatted:
+    description: Number of files automatically formatted
+    
+  tags_applied:
+    description: List of tags applied to the MR
+
+# Plugin configuration
+config:
+  supported_languages:
+    - Python
+    - JavaScript
+    - TypeScript
+    - Java
+    - Go
+    - Rust
+    - C/C++
+    - PHP
+    - Ruby
+    - Swift
+    - Kotlin
+    
+  features:
+    - code_formatting
+    - ai_review
+    - security_scanning
+    - intelligent_tagging
+    - changelog_generation
+    - performance_analysis
+    
+  integrations:
+    - GitLab CI/CD
+    - Gemini AI
+    - Multiple code formatters
+    - Security scanners
+
+# Usage instructions
+usage: |
+  1. Add this plugin to your GitLab project
+  2. Set required environment variables (LLM_API_KEY, GITLAB_PAT)
+  3. Customize .smartpr.yml for project-specific settings
+  4. Create merge requests to trigger automated review
+  5. Review AI suggestions in MR comments
+  6. Changelog automatically updates on main branch merges
+
+# Examples
+examples:
+  basic_setup: |
+    # In your .gitlab-ci.yml, include:
+    include:
+      - remote: 'https://gitlab.com/smart-pr-ai/plugin/-/raw/main/.gitlab-ci.yml'
+    
+  custom_config: |
+    # Create .smartpr.yml in your project root:
+    review_focus:
+      - security
+      - performance
+    language_configs:
+      python:
+        max_complexity: 8

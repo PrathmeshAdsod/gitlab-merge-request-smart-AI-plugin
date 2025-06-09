@@ -1,0 +1,96 @@
+# Smart PR AI Configuration File
+# Customize the behavior of the AI review system
+
+# File processing settings
+max_file_size: 100000  # Maximum file size to review (bytes)
+max_files_per_review: 20  # Maximum number of files to review in one MR
+
+# Ignore patterns (glob patterns)
+ignore_patterns:
+  - '.git/*'
+  - 'node_modules/*'
+  - '*.min.js'
+  - '*.bundle.js'
+  - '*.log'
+  - 'dist/*'
+  - 'build/*'
+  - '__pycache__/*'
+  - '*.pyc'
+  - '.env'
+  - '.env.*'
+
+# Review focus areas
+review_focus:
+  - security
+  - performance
+  - maintainability
+  - best_practices
+  - error_handling
+  - testing
+
+# Language-specific configurations
+language_configs:
+  python:
+    max_complexity: 10
+    enable_security_scan: true
+    style_guide: "PEP8"
+    linting_tools: ["black", "isort", "flake8"]
+    
+  javascript:
+    enable_eslint_suggestions: true
+    style_guide: "StandardJS"
+    enable_security_scan: true
+    
+  typescript:
+    strict_mode_suggestions: true
+    enable_eslint_suggestions: true
+    
+  java:
+    style_guide: "Google"
+    enable_security_scan: true
+    
+  go:
+    enable_gofmt_suggestions: true
+    enable_security_scan: true
+
+# AI Review settings
+ai_settings:
+  model: "gemini-1.5-flash"
+  max_tokens: 4000
+  temperature: 0.3
+  focus_on_changes_only: true
+  provide_code_suggestions: true
+  include_positive_feedback: true
+
+# Security scanning
+security:
+  enable_secret_detection: true
+  enable_vulnerability_scanning: true
+  severity_threshold: "medium"  # low, medium, high
+  
+# Tagging rules
+tagging:
+  auto_tag_languages: true
+  auto_tag_categories: true
+  custom_tags:
+    - name: "hotfix"
+      pattern: "hotfix|urgent|critical"
+      color: "#dc3545"
+    - name: "refactor"
+      pattern: "refactor|cleanup|restructure"
+      color: "#6f42c1"
+
+# Changelog settings
+changelog:
+  enabled: true
+  format: "markdown"
+  group_by_category: true
+  include_author: true
+  include_merge_request_link: true
+  max_description_length: 200
+
+# Notification settings
+notifications:
+  on_security_issues: true
+  on_breaking_changes: true
+  mention_author_on_issues: true

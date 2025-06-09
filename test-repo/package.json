@@ -1,0 +1,25 @@
+{
+  "name": "smart-pr-ai-plugin",
+  "version": "2.0.0",
+  "description": "Enhanced Smart PR AI GitLab Plugin with comprehensive code review, formatting, and automation",
+  "private": false,
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "test": "echo \"Create a merge request to test the plugin\" && exit 0"
+  },
+  "keywords": [
+    "gitlab",
+    "ci-cd",
+    "ai",
+    "code-review",
+    "automation",
+    "gemini",
+    "formatting"
+  ],
+  "author": "Smart PR AI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/your-username/smart-pr-ai-plugin"
+  }
+}
