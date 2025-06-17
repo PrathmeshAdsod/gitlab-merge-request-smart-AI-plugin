@@ -1,2 +1,5 @@
 !/test-repo/
 !/test-repo/**
+CHANGELOG.md
+scripts/generate_changelog.py
+changelog_entry.txt
