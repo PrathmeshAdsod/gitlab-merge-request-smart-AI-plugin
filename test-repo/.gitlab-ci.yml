@@ -3,7 +3,6 @@ stages:
   - format
   - review
   - tag
-  - changelog
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -80,23 +79,3 @@ intelligent_tagging:
     paths:
       - applied_tags.json
     expire_in: 1 hour
-
-generate_changelog:
-  stage: changelog
-  image: python:3.11-slim
-  only:
-    - main
-    - master
-  when: on_success
-  before_script:
-    - pip install requests python-gitlab gitpython
-  script:
-    - python scripts/generate_changelog.py
-  variables:
-    GIT_STRATEGY: fetch
-    GIT_DEPTH: 0
-  artifacts:
-    paths:
-      - CHANGELOG.md
-      - changelog_update.json
-    expire_in: 7 days

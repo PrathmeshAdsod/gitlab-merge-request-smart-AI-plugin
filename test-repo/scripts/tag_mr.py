@@ -134,29 +134,29 @@ class IntelligentTagger:
         }
 
     def enhance_tags_with_context(self, ai_tags: List[str], review_status: Dict[str, Any]) -> List[str]:
-        """Enhance AI-suggested tags with additional context"""
-        enhanced_tags = ai_tags.copy()
+        """Enhance AI-suggested tags with additional context and deduplicate"""
+        enhanced_tags = set(ai_tags)
         
         # Add status-based tags
         if review_status.get('security_issues', 0) > 0:
-            enhanced_tags.append('security-review-needed')
+            enhanced_tags.add('security')
+            enhanced_tags.add('security-review-needed')
         
         if review_status.get('high_severity_issues', 0) > 0:
-            enhanced_tags.append('high-priority')
+            enhanced_tags.add('high-priority')
         elif review_status.get('total_issues', 0) == 0:
-            enhanced_tags.append('ready-for-review')
+            enhanced_tags.add('good-to-merge')
+            enhanced_tags.add('clean-code')
         
-        # Add review status tag
-        enhanced_tags.append('ai-reviewed')
+        # Always add ai-reviewed
+        enhanced_tags.add('ai-reviewed')
         
-        # Add priority based on issue count
+        # Add needs-attention if many issues
         total_issues = review_status.get('total_issues', 0)
         if total_issues > 10:
-            enhanced_tags.append('needs-attention')
-        elif total_issues == 0:
-            enhanced_tags.append('clean-code')
+            enhanced_tags.add('needs-attention')
         
-        return list(set(enhanced_tags))  # Remove duplicates
+        return list(enhanced_tags)
 
     def run(self):
         """Main execution method"""

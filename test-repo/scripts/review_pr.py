@@ -205,63 +205,22 @@ class SmartCodeReviewer:
         
         return sorted(list(tags))
 
-    def create_review_prompt(self, file_path: str, diff: str, content: str) -> str:
-        """Create detailed prompt for AI review"""
-        language = Path(file_path).suffix.lstrip('.')
-        
-        prompt = f"""
-As an expert code reviewer, analyze this {language} code change and provide constructive feedback.
-
-FILE: {file_path}
-LANGUAGE: {language}
-
-DIFF:
-```diff
-{diff}
-```
-
-FULL FILE CONTENT (for context):
-```{language}
-{content[:3000]}{'...' if len(content) > 3000 else ''}
-```
-
-Please analyze and provide feedback on:
-1. **Code Quality**: Style, readability, maintainability
-2. **Security**: Potential vulnerabilities or security concerns
-3. **Performance**: Efficiency and optimization opportunities
-4. **Best Practices**: Language-specific conventions and patterns
-5. **Error Handling**: Robustness and edge case handling
-6. **Testing**: Testability and test coverage considerations
-
-For each issue found, provide:
-- Specific line numbers if applicable
-- Clear description of the issue
-- Suggested improvement
-- Severity (high/medium/low)
-
-Also identify:
-- Whether this introduces breaking changes
-- Performance impact (positive/negative/neutral)
-- Required follow-up actions
-
-Respond in JSON format:
-{{
-  "summary": "Overall assessment summary",
-  "issues": [
-    {{
-      "line": 123,
-      "severity": "medium",
-      "category": "performance",
-      "description": "Issue description",
-      "suggestion": "Specific improvement suggestion"
-    }}
-  ],
-  "positive_aspects": ["List of good practices found"],
-  "has_breaking_changes": false,
-  "performance_impact": "neutral",
-  "follow_up_actions": ["List of recommended actions"]
-}}
-"""
+    def build_prompt(self, file_diffs: Dict[str, str], description: str) -> str:
+        """Build an efficient, context-rich prompt for Gemini review"""
+        prompt = (
+            "You are a world-class AI code reviewer. Review the following code diffs and MR description. "
+            "For each file, provide actionable, concise suggestions for code quality, security, performance, maintainability, and best practices. "
+            "Highlight any security issues, code smells, or anti-patterns. "
+            "Suggest improved variable/function/class names, and point out missing docstrings or comments. "
+            "If the code is already optimal, say so. "
+            "Return a JSON object with keys: 'suggestions' (list of objects with file, line, suggestion, reason, type), "
+            "'tags' (list of relevant, specific tags for this MR, e.g. security, performance, needs-docs, good-to-merge, etc), "
+            "'pr_summary' (1-sentence summary), and 'changelog_entry' (1-sentence changelog). "
+            "Be accurate, relevant, and avoid generic advice."
+            f"\n\nMR Description:\n{description}\n\nCode Diffs:\n"
+        )
+        for file, diff in file_diffs.items():
+            prompt += f"\nFile: {file}\nDiff:\n{diff}\n"
         return prompt
 
     def review_file(self, file_path: str) -> Dict[str, Any]:

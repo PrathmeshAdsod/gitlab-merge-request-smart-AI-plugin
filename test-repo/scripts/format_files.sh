@@ -65,7 +65,13 @@ echo "📁 Files to check:"
 echo "$CHANGED_FILES" | while read file; do echo "  - $file"; done
 
 # Format Python files
-echo "🐍 Formatting Python files..."
+if command -v black >/dev/null 2>&1 && command -v isort >/dev/null 2>&1 && command -v autopep8 >/dev/null 2>&1; then
+  echo "🐍 Formatting Python files with black, isort, and autopep8..."
+else
+  echo "⚠️  Python formatters not installed. Installing..."
+  pip install black isort autopep8
+fi
+
 for file in $(echo "$CHANGED_FILES" | grep -E '\.(py)$' || true); do
     if [ -f "$file" ]; then
         TOTAL_FILES=$((TOTAL_FILES + 1))
